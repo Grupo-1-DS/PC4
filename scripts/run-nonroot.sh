@@ -3,13 +3,15 @@ set -euo pipefail
 
 # Script para ejecutar el contenedor con usuario sin privilegios
 
-echo "Iniciando contenedor non-root..."
+VERSION="1.0.0"
+
+echo "Iniciando contenedor non-root versión ${VERSION}..."
 
 # Levanta el contenedor en modo detached en puerto 8001
 docker run -d \
   --name pc4-app-nonroot \
   -p 8001:8000 \
-  pc4-app-nonroot:latest
+  pc4-app-nonroot:${VERSION}
 
 echo "Contenedor non-root iniciado!"
 echo "Nombre: pc4-app-nonroot"

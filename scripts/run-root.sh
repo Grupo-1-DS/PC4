@@ -3,13 +3,15 @@ set -euo pipefail
 
 # Script para ejecutar el contenedor con usuario root
 
-echo "Iniciando contenedor root..."
+VERSION="1.0.0"
+
+echo "Iniciando contenedor root versión ${VERSION}..."
 
 # Levanta el contenedor en modo detached en puerto 8000
 docker run -d \
   --name pc4-app-root \
   -p 8000:8000 \
-  pc4-app-root:latest
+  pc4-app-root:${VERSION}
 
 echo "Contenedor root iniciado!"
 echo "Nombre: pc4-app-root"
