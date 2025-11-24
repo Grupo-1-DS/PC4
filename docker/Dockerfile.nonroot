@@ -1,0 +1,16 @@
+FROM python:3.12-slim
+
+RUN useradd -ms /bin/bash appuser
+
+WORKDIR /app-nonroot
+COPY ../app /app-nonroot
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN mkdir -p /restricted && chown -R appuser:appuser /app-nonroot
+RUN chmod 555 /restricted
+
+USER appuser
+
+CMD ["python", "main.py"]
+
