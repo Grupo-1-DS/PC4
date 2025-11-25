@@ -58,3 +58,53 @@ kubectl get deployments
 kubectl get pods
 kubectl get services
 ```
+
+### Script de comparación automatizada
+
+#### compare-modes.sh
+
+Script automatizado que compara el comportamiento de contenedores ejecutándose como root vs non-root en Kubernetes.
+
+**Funcionalidad**:
+
+El script ejecuta los siguientes pasos de forma automatizada:
+
+1. **Construcción de imágenes**: Construye ambas imágenes Docker (root y non-root) usando el script `build.sh`
+2. **Despliegue de manifiestos**: Aplica los manifiestos de Kubernetes para ambos deployments y sus servicios
+3. **Verificación de pods**: Espera a que ambos pods estén en estado `ready` antes de continuar
+4. **Port-forwarding**: Inicia `kubectl port-forward` en background para exponer los servicios en puertos locales (8080 para root, 8081 para non-root)
+5. **Pruebas de endpoints**: Ejecuta `curl` contra los endpoints `/whoami` y `/write-file` de ambos servicios
+6. **Recolección de datos**: Obtiene los logs de ambos pods y extrae información relevante (UID, capacidad de escritura)
+7. **Generación de reporte**: Crea un archivo JSON en `reports/compare.json` con toda la información recolectada
+8. **Limpieza automática**: Mata los procesos de port-forward al finalizar (incluso si ocurre un error)
+
+**Uso**:
+
+```bash
+# Configurar el entorno Docker de minikube
+eval $(minikube docker-env)
+
+# Ejecutar el script de comparación
+bash scripts/compare-modes-portforward.sh
+
+# Ver el reporte generado
+cat reports/compare.json
+```
+
+**Ventajas de usar port-forward**:
+
+- No requiere `minikube tunnel` corriendo en otra terminal
+- Funciona perfectamente en WSL sin bloquear la consola
+- Limpieza automática de recursos al finalizar
+- Acceso a servicios mediante `localhost` en lugar de IP de minikube
+
+**Estructura del reporte JSON**:
+
+El archivo `reports/compare.json` contiene:
+
+- Timestamp de ejecución
+- Información completa de ambos modos (root y non-root)
+- UID del usuario en cada contenedor
+- Resultado de intentar escribir archivos
+- Logs completos de cada pod
+- Resumen comparativo de las diferencias
