@@ -2,9 +2,8 @@
 set -euo pipefail
 
 # Script para comparar el comportamiento de contenedores root vs non-root
-# Versión con port-forward (ideal para WSL)
+# Versión con port-forward (para wsl )
 
-VERSION="1.0.0"
 REPORTS_DIR="reports"
 OUTPUT_FILE="${REPORTS_DIR}/compare.json"
 
