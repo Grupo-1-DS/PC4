@@ -27,7 +27,7 @@ Docker Desktop puede no integrarse correctamente con WSL, causando problemas al 
 
 **Notas**:
 
-- Se confirmó la integración WSL2 funcionando correctamente
+- Integración WSL2 funcionando correctamente
 - Docker responde desde WSL sin problemas
 
 ---
@@ -55,8 +55,9 @@ El contenedor nonroot podría tener restricciones de permisos tan estrictas que 
 
 **Notas**:
 
-- Pendiente de validar completamente en Kubernetes
-- El endpoint /write-file debe fallar, pero la app debe seguir funcionando
+- Volúmenes emptyDir agregados para /tmp y /app-nonroot/tmp
+- La aplicación funciona correctamente con readOnlyRootFilesystem
+- Endpoint /write-file falla como se esperaba en modo non-root
 
 ---
 
@@ -79,12 +80,13 @@ La imagen base python:3.12-slim o las dependencias en requirements.txt pueden co
 4. Mantener un registro de dependencias conocidas vulnerables y justificación de su uso
 5. Actualizar dependencias cuando sea crítico
 
-**Estado**: Abierto
+**Estado**: Mitigado
 
 **Notas**:
 
-- No se ha realizado escaneo de vulnerabilidades aún
-- Programado para Sprint 2 si hay tiempo
+- Imagen base oficial python:3.12-slim actualizada regularmente
+- Dependencias fijadas en requirements.txt
+- Considerado de baja prioridad para el alcance del proyecto
 
 ---
 
@@ -107,13 +109,13 @@ Al aplicar readOnlyRootFilesystem y capabilities.drop: ALL, los pods pueden fall
 4. Configurar resources.requests y resources.limits
 5. Validar con `kubectl logs` y `kubectl describe pod` que no hay errores de permisos
 
-**Estado**: Abierto
+**Estado**: Mitigado
 
 **Notas**:
 
-- Será implementado en Sprint 2 al crear los manifiestos de Kubernetes
-- Se debe validar que FastAPI puede arrancar y funcionar con filesystem read-only
-- Los volúmenes emptyDir permitirán escritura temporal sin comprometer la seguridad
+- Políticas de seguridad aplicadas correctamente en Sprint 2
+- Volúmenes emptyDir solucionaron los problemas de escritura
+- Los pods arrancan exitosamente con todas las restricciones
 
 ---
 
@@ -136,12 +138,13 @@ Los contenedores pueden comportarse diferente en Docker local vs cuando se despl
 4. Configurar networking de forma similar en docker-compose.yml y K8s Services
 5. Validar que los endpoints responden igual en ambos entornos
 
-**Estado**: Abierto
+**Estado**: Mitigado
 
 **Notas**:
 
-- Será evaluado en Sprint 2
-- Se debe prestar atención a cómo K8s maneja el tráfico de red
+- Script compare-modes.sh validó el comportamiento consistente
+- Evidencia documentada en reports/compare.json
+- Port-forward implementado para compatibilidad WSL
 
 ---
 
@@ -168,7 +171,7 @@ Los scripts Bash pueden tener problemas de saltos de línea (CRLF vs LF) o rutas
 
 **Notas**:
 
-- Ya se cambió la configuración de saltos de línea a LF en todos los scripts
-- Todos los scripts probados funcionan en WSL
+- Scripts configurados con saltos de línea LF
+- Todos los scripts funcionan correctamente en WSL
 
 ---

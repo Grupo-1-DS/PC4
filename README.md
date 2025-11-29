@@ -1,110 +1,180 @@
-# Non-root everywhere lab
+# Non-Root Everywhere Lab
 
-## Manifiestos de Kubernetes
+Proyecto de DevSecOps que demuestra la implementación de contenedores Docker con usuarios no privilegiados (non-root) y su despliegue en Kubernetes con políticas de seguridad estrictas.
 
-Este proyecto incluye manifiestos de Kubernetes en la carpeta `k8s/` para demostrar la ejecución de contenedores en un entorno orquestado. Los manifiestos permiten comparar el comportamiento de contenedores ejecutándose como root vs non-root directamente en Kubernetes.
+## Integrantes
 
-### Archivos incluidos
+- Gabriel Castillejo
+- Albert Argumedo
 
-#### deployment-root.yaml
+## Videos de Evidencia
 
-Deployment básico que ejecuta el contenedor `pc4-app-root` como usuario root (comportamiento por defecto de Kubernetes).
+- [Videos Sprints](https://drive.google.com/drive/folders/10V9HbKCMk-8vFK8k9YFh1NgdjUAnfxL0?usp=sharing)
 
-**Características**:
+## Objetivo del Proyecto
 
-- Ejecuta como usuario root sin restricciones
-- Configura límites de recursos (CPU y memoria)
-- Expone el puerto 8000
+Implementar y comparar el comportamiento de aplicaciones contenedorizadas ejecutándose como root vs non-root, tanto en Docker como en Kubernetes (Minikube). El proyecto incluye:
 
-#### deployment-nonroot.yaml
+- Aplicación FastAPI con endpoints de prueba
+- Contenedores Docker con dos configuraciones: root y non-root
+- Manifiestos Kubernetes con políticas de seguridad
+- Script automatizado de comparación y generación de reportes
 
-Deployment con configuraciones de seguridad reforzadas que ejecuta el contenedor `pc4-app-nonroot` con un usuario sin privilegios.
+## Tecnologías Utilizadas
 
-**Características de seguridad implementadas**:
+- **Python 3.12**: Aplicación FastAPI
+- **Docker**: Contenedorización
+- **Kubernetes (Minikube)**: Orquestación de contenedores
+- **Bash**: Scripts de automatización
+- **WSL2**: Entorno de desarrollo
 
-- `runAsUser: 1000` y `runAsNonRoot: true`: Ejecuta el contenedor como usuario ID 1000 (no root)
-- `readOnlyRootFilesystem: true`: El filesystem root es read-only, previene escrituras maliciosas
-- `allowPrivilegeEscalation: false`: Impide que el proceso obtenga más privilegios
-- `capabilities.drop: [ALL]`: Elimina todas las capabilities de Linux del contenedor
-- Volúmenes emptyDir para `/tmp` y `/app-nonroot/tmp`: Provee directorios escribibles necesarios para la aplicación
+## Estructura del Proyecto
 
-#### service.yaml
-
-Define dos servicios de tipo NodePort para exponer las aplicaciones fuera del cluster.
-
-**Servicios incluidos**:
-
-- `pc4-app-root-service`: Expone el deployment root en el puerto 30080
-- `pc4-app-nonroot-service`: Expone el deployment non-root en el puerto 30081
-
-### Uso
-
-Para deployar los manifiestos en un cluster de Kubernetes (como Minikube):
-
-```bash
-# Definir el entorno de instalacion de las imagenes
-eval $(minikube docker-env)
-
-# Construir Imagenes
-make build
-
-# Deployar ambas aplicaciones
-kubectl apply -f k8s/deployment-root.yaml
-kubectl apply -f k8s/deployment-nonroot.yaml
-kubectl apply -f k8s/service.yaml
-
-# Verificar los deployments
-kubectl get deployments
-kubectl get pods
-kubectl get services
+```
+.
+├── app/
+│   ├── main.py              # Aplicación FastAPI
+│   └── requirements.txt     # Dependencias Python
+├── docker/
+│   ├── Dockerfile.root      # Dockerfile ejecutando como root
+│   └── Dockerfile.nonroot   # Dockerfile con usuario no privilegiado
+├── k8s/
+│   ├── deployment-root.yaml     # Deployment sin restricciones
+│   ├── deployment-nonroot.yaml  # Deployment con políticas de seguridad
+│   └── service.yaml             # Servicios NodePort
+├── scripts/
+│   ├── build.sh                 # Construye ambas imágenes Docker
+│   ├── run-root.sh              # Ejecuta contenedor root
+│   ├── run-nonroot.sh           # Ejecuta contenedor non-root
+│   ├── k8s-apply-*.sh           # Scripts de despliegue K8s
+│   ├── k8s-clean.sh             # Limpia recursos de K8s
+│   └── compare-modes.sh         # Script de comparación automatizada
+├── doc/
+│   ├── sprint-backlog-sprint1.md
+│   ├── sprint-backlog-sprint2.md
+│   ├── metrics.md
+│   └── risk-register.md
+├── reports/
+│   └── compare.json         # Reporte de comparación
+└── Makefile                 # Comandos make para build y ejecución
 ```
 
-### Script de comparación automatizada
+## Configuraciones de Seguridad
 
-#### compare-modes.sh
+### Modo Non-Root (deployment-nonroot.yaml)
 
-Script automatizado que compara el comportamiento de contenedores ejecutándose como root vs non-root en Kubernetes.
+El deployment non-root implementa las siguientes políticas de seguridad:
 
-**Funcionalidad**:
+- **runAsUser: 1000**: Ejecuta como usuario sin privilegios
+- **runAsNonRoot: true**: Previene ejecución como root
+- **readOnlyRootFilesystem: true**: Sistema de archivos raíz de solo lectura
+- **allowPrivilegeEscalation: false**: Impide escalación de privilegios
+- **capabilities.drop: [ALL]**: Elimina todas las capabilities de Linux
+- **Volúmenes emptyDir**: Montados en /tmp y /app-nonroot/tmp para escritura temporal
 
-El script ejecuta los siguientes pasos de forma automatizada:
+## Uso
 
-1. **Construcción de imágenes**: Construye ambas imágenes Docker (root y non-root) usando el script `build.sh`
-2. **Despliegue de manifiestos**: Aplica los manifiestos de Kubernetes para ambos deployments y sus servicios
-3. **Verificación de pods**: Espera a que ambos pods estén en estado `ready` antes de continuar
-4. **Port-forwarding**: Inicia `kubectl port-forward` en background para exponer los servicios en puertos locales (8080 para root, 8081 para non-root)
-5. **Pruebas de endpoints**: Ejecuta `curl` contra los endpoints `/whoami` y `/write-file` de ambos servicios
-6. **Recolección de datos**: Obtiene los logs de ambos pods y extrae información relevante (UID, capacidad de escritura)
-7. **Generación de reporte**: Crea un archivo JSON en `reports/compare.json` con toda la información recolectada
-8. **Limpieza automática**: Mata los procesos de port-forward al finalizar (incluso si ocurre un error)
-
-**Uso**:
+### Construcción de Imágenes Docker
 
 ```bash
-# Configurar el entorno Docker de minikube
+# Construir ambas imágenes
+make build
+
+# O manualmente
+bash scripts/build.sh
+```
+
+### Ejecución en Docker
+
+```bash
+# Ejecutar modo root
+make run-root
+
+# Ejecutar modo non-root
+make run-nonroot
+
+# Limpiar contenedores
+make clean
+```
+
+### Despliegue en Kubernetes
+
+```bash
+# Configurar entorno Docker de Minikube
 eval $(minikube docker-env)
 
-# Ejecutar el script de comparación
-bash scripts/compare-modes-portforward.sh
+# Construir imágenes
+make build
 
-# Ver el reporte generado
+# Aplicar manifiestos
+make k8s-apply
+
+# Verificar estado
+kubectl get pods
+kubectl get services
+
+# Limpiar recursos
+make k8s-clean
+```
+
+### Script de Comparación Automatizada
+
+El script `compare-modes.sh` automatiza todo el proceso de comparación:
+
+```bash
+# Ejecutar comparación completa
+bash scripts/compare-modes.sh
+
+# Ver reporte generado
 cat reports/compare.json
 ```
 
-**Ventajas de usar port-forward**:
+**Qué hace el script:**
 
-- No requiere `minikube tunnel` corriendo en otra terminal
-- Funciona perfectamente en WSL sin bloquear la consola
-- Limpieza automática de recursos al finalizar
-- Acceso a servicios mediante `localhost` en lugar de IP de minikube
+1. Construye ambas imágenes Docker
+2. Despliega ambos deployments en Kubernetes
+3. Espera a que los pods estén listos
+4. Ejecuta pruebas contra los endpoints /whoami y /write-file
+5. Recolecta logs y resultados
+6. Genera reporte JSON con la comparación completa
 
-**Estructura del reporte JSON**:
+## Endpoints de la Aplicación
 
-El archivo `reports/compare.json` contiene:
+- `GET /`: Mensaje de bienvenida
+- `GET /whoami`: Retorna información del usuario (UID, GID, username)
+- `POST /write-file`: Intenta escribir un archivo en /restricted/test.txt
 
-- Timestamp de ejecución
-- Información completa de ambos modos (root y non-root)
-- UID del usuario en cada contenedor
-- Resultado de intentar escribir archivos
-- Logs completos de cada pod
-- Resumen comparativo de las diferencias
+## Resultados
+
+### Modo Root
+
+- **UID**: 0 (root)
+- **Escritura de archivos**: ✓ Exitosa
+- **Permisos**: Sin restricciones
+
+### Modo Non-Root
+
+- **UID**: 1000 (appuser)
+- **Escritura de archivos**: ✗ Bloqueada
+- **Error**: "[Errno 30] Read-only file system"
+- **Permisos**: Restringidos según políticas de seguridad
+
+## Documentación Adicional
+
+- [Sprint Backlog - Sprint 1](doc/sprint-backlog-sprint1.md)
+- [Sprint Backlog - Sprint 2](doc/sprint-backlog-sprint2.md)
+- [Métricas del Proyecto](doc/metrics.md)
+- [Registro de Riesgos](doc/risk-register.md)
+- [Definition of Done](doc/definition-of-done.md)
+- [Visión del Proyecto](doc/vision.md)
+
+## Conclusiones
+
+Este proyecto demuestra la importancia de ejecutar contenedores con usuarios no privilegiados y aplicar políticas de seguridad estrictas en Kubernetes. Las configuraciones implementadas:
+
+- Reducen la superficie de ataque
+- Previenen escalación de privilegios
+- Limitan el impacto de posibles vulnerabilidades
+- Mantienen la funcionalidad de la aplicación
+
+El script de comparación automatizada proporciona evidencia concreta del comportamiento de ambos modos, facilitando la validación de las políticas de seguridad aplicadas.

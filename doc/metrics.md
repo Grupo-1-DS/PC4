@@ -48,3 +48,56 @@ Este documento registra las métricas de proceso, calidad técnica y seguridad p
 - Después se mantuvo 1 issue a la vez
 - No hubo bloqueos significativos
 - El equipo logró mantener un flujo constante sin acumular WIP excesivo
+
+---
+
+## Sprint 2
+
+**Duración**: Días 6-10
+
+### Métricas de proceso (Scrum/Kanban)
+
+#### Throughput
+
+- **Historias completadas**: 4 de 4 (100%)
+  - Issue #6: Manifiestos Kubernetes
+  - Issue #7: Scripts de despliegue K8s
+  - Issue #8: Script compare-modes
+  - Issue #9: Documentación final
+- **Tareas técnicas completadas**: 11
+  - k8s/deployment-root.yaml
+  - k8s/deployment-nonroot.yaml
+  - k8s/service.yaml (dos servicios NodePort)
+  - scripts/k8s-apply-root.sh
+  - scripts/k8s-apply-nonroot.sh
+  - scripts/k8s-apply-service.sh
+  - scripts/k8s-clean.sh
+  - scripts/compare-modes.sh (156 líneas)
+  - Actualización de Makefile (targets k8s-apply y k8s-clean)
+  - reports/compare.json generado
+  - Documentación de manifiestos
+
+#### Lead Time
+
+- **Promedio de tiempo desde In Progress hasta Done**: 8 horas
+- **Tarea más rápida**: Issue #8 (57 minutos)
+- **Tarea más lenta**: Issue #6 (22 horas)
+
+**Notas**:
+
+- Issue #6 tomó más tiempo por las iteraciones necesarias para configurar volúmenes emptyDir correctamente
+- Los issues #7 y #8 se completaron rápidamente al tener los manifiestos ya listos
+- El script compare-modes.sh fue muy eficiente en su implementación
+
+#### WIP (Work in Progress)
+
+- **Límite WIP acordado**: 2 issues
+- **WIP máximo observado**: 1 issue a la vez
+- **WIP promedio**: 1 issue
+
+**Observaciones**:
+
+- Se trabajó de forma más secuencial en este sprint
+- Cada issue dependía del anterior (manifiestos -> scripts -> comparación)
+- No hubo bloqueos técnicos significativos
+- El trabajo se distribuyó entre ambos miembros del equipo
