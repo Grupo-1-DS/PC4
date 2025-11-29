@@ -48,3 +48,52 @@ Este documento registra las métricas de proceso, calidad técnica y seguridad p
 - Después se mantuvo 1 issue a la vez
 - No hubo bloqueos significativos
 - El equipo logró mantener un flujo constante sin acumular WIP excesivo
+
+---
+
+## Sprint 2
+
+**Duración**: Días 6-10
+
+### Métricas de proceso (Scrum/Kanban)
+
+#### Throughput
+
+- **Historias completadas**: 4 de 4 (100%)
+  - Issue #6: Crear manifiestos Kubernetes
+  - Issue #7: Crear scripts bash para aplicar K8s
+  - Issue #8: Crear script bash compare-modes.sh
+  - Issue #9: Crear documentación final
+- **Tareas técnicas completadas**: 11
+  - k8s/deployment-root.yaml
+  - k8s/deployment-nonroot.yaml
+  - k8s/service.yaml
+  - scripts/k8s-apply-root.sh
+  - scripts/k8s-apply-nonroot.sh
+  - scripts/k8s-apply-service.sh
+  - scripts/k8s-clean.sh
+  - scripts/compare-modes.sh
+  - Actualización de Makefile
+  - reports/compare.json generado
+  - Documentación de manifiestos
+
+#### Lead Time
+
+- **Promedio de tiempo desde In Progress hasta Done**: 8 horas
+- **Tarea más rápida**: Issue #8 (57 minutos)
+- **Tarea más lenta**: Issue #6 (22 horas)
+
+**Notas**:
+
+- Los issues #7 y #8 se completaron rápidamente al tener los manifiestos ya listos
+- El script compare-modes.sh fue muy eficiente en su implementación
+
+#### WIP (Work in Progress)
+
+- **Límite WIP acordado**: 2 issues
+- **WIP máximo observado**: 1 issue a la vez
+- **WIP promedio**: 1 issue
+
+**Observaciones**:
+
+- Se trabajó de forma más secuencial en este sprint

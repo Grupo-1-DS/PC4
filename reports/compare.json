@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-11-29T06:43:44Z",
+  "method": "port-forward",
+  "comparison": {
+    "root": {
+      "uid": 0,
+      "user_info": {"uid":0,"gid":0,"user":"root"},
+      "can_write_file": true,
+      "write_result": {"message":"Archivo escrito con éxito en /restricted/test.txt"},
+      "pod_name": "pc4-app-root-847d9fdd74-9qgd7",
+      "logs": "INFO:     Started server process [1]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)\nUsername is root, UID is 0, GID is 0\nINFO:     127.0.0.1:56534 - \"GET /whoami HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:56546 - \"GET /write-file HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:49510 - \"GET /whoami HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:49524 - \"GET /write-file HTTP/1.1\" 200 OK\n",
+      "endpoint": "http://localhost:8030",
+      "local_port": 8030
+    },
+    "nonroot": {
+      "uid": 1000,
+      "user_info": {"uid":1000,"gid":1000,"user":"appuser"},
+      "can_write_file": false,
+      "write_result": {"error":"[Errno 30] Read-only file system: '/restricted/test.txt'"},
+      "pod_name": "pc4-app-nonroot-68648846b8-brvtc",
+      "logs": "INFO:     Started server process [1]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)\nUsername is appuser, UID is 1000, GID is 1000\nINFO:     127.0.0.1:56556 - \"GET /whoami HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:56562 - \"GET /write-file HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:49540 - \"GET /whoami HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:49552 - \"GET /write-file HTTP/1.1\" 200 OK\n",
+      "endpoint": "http://localhost:8031",
+      "local_port": 8031
+    }
+  },
+  "summary": {
+    "root_uid": 0,
+    "nonroot_uid": 1000,
+    "root_can_write": true,
+    "nonroot_can_write": false
+  }
+}
