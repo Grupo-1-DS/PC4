@@ -126,6 +126,9 @@ kubectl get services
 # Desplegar servicios 
 make k8s-deploy
 
+# Comparar los resultados de cada endpoint de la app en cada despliegue
+make k8s-compare
+
 # Limpiar recursos
 make k8s-clean
 ```
