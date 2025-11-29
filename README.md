@@ -8,7 +8,7 @@ Proyecto de DevSecOps que demuestra la implementación de contenedores Docker co
 - Albert Argumedo
 
 ## Videos de Evidencia
-
+- [Videos Exposicion](https://drive.google.com/drive/folders/1SNa34Lyx3ax-IsQRORZtOY0PR04NWgiN?usp=sharing)
 - [Videos Sprints](https://drive.google.com/drive/folders/10V9HbKCMk-8vFK8k9YFh1NgdjUAnfxL0?usp=sharing)
 
 ## Objetivo del Proyecto
