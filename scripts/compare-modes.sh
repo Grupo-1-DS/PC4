@@ -8,8 +8,8 @@ REPORTS_DIR="reports"
 OUTPUT_FILE="${REPORTS_DIR}/compare.json"
 
 # Puertos locales para port-forward
-ROOT_LOCAL_PORT=8080
-NONROOT_LOCAL_PORT=8081
+ROOT_LOCAL_PORT=8030
+NONROOT_LOCAL_PORT=8031
 
 echo "=== Iniciando comparación de modos root vs non-root (port-forward) ==="
 

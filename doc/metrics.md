@@ -60,20 +60,20 @@ Este documento registra las métricas de proceso, calidad técnica y seguridad p
 #### Throughput
 
 - **Historias completadas**: 4 de 4 (100%)
-  - Issue #6: Manifiestos Kubernetes
-  - Issue #7: Scripts de despliegue K8s
-  - Issue #8: Script compare-modes
-  - Issue #9: Documentación final
+  - Issue #6: Crear manifiestos Kubernetes
+  - Issue #7: Crear scripts bash para aplicar K8s
+  - Issue #8: Crear script bash compare-modes.sh
+  - Issue #9: Crear documentación final
 - **Tareas técnicas completadas**: 11
   - k8s/deployment-root.yaml
   - k8s/deployment-nonroot.yaml
-  - k8s/service.yaml (dos servicios NodePort)
+  - k8s/service.yaml
   - scripts/k8s-apply-root.sh
   - scripts/k8s-apply-nonroot.sh
   - scripts/k8s-apply-service.sh
   - scripts/k8s-clean.sh
-  - scripts/compare-modes.sh (156 líneas)
-  - Actualización de Makefile (targets k8s-apply y k8s-clean)
+  - scripts/compare-modes.sh
+  - Actualización de Makefile
   - reports/compare.json generado
   - Documentación de manifiestos
 
@@ -85,7 +85,6 @@ Este documento registra las métricas de proceso, calidad técnica y seguridad p
 
 **Notas**:
 
-- Issue #6 tomó más tiempo por las iteraciones necesarias para configurar volúmenes emptyDir correctamente
 - Los issues #7 y #8 se completaron rápidamente al tener los manifiestos ya listos
 - El script compare-modes.sh fue muy eficiente en su implementación
 
@@ -98,6 +97,3 @@ Este documento registra las métricas de proceso, calidad técnica y seguridad p
 **Observaciones**:
 
 - Se trabajó de forma más secuencial en este sprint
-- Cada issue dependía del anterior (manifiestos -> scripts -> comparación)
-- No hubo bloqueos técnicos significativos
-- El trabajo se distribuyó entre ambos miembros del equipo

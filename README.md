@@ -41,7 +41,7 @@ Implementar y comparar el comportamiento de aplicaciones contenedorizadas ejecut
 ├── k8s/
 │   ├── deployment-root.yaml     # Deployment sin restricciones
 │   ├── deployment-nonroot.yaml  # Deployment con políticas de seguridad
-│   └── service.yaml             # Servicios NodePort
+│   └── service.yaml             # Servicios k8s
 ├── scripts/
 │   ├── build.sh                 # Construye ambas imágenes Docker
 │   ├── run-root.sh              # Ejecuta contenedor root
@@ -53,7 +53,9 @@ Implementar y comparar el comportamiento de aplicaciones contenedorizadas ejecut
 │   ├── sprint-backlog-sprint1.md
 │   ├── sprint-backlog-sprint2.md
 │   ├── metrics.md
-│   └── risk-register.md
+|   ├── vision.md
+│   ├── risk-register.md
+|   └── definition-of-done.md
 ├── reports/
 │   └── compare.json         # Reporte de comparación
 └── Makefile                 # Comandos make para build y ejecución
@@ -73,6 +75,14 @@ El deployment non-root implementa las siguientes políticas de seguridad:
 - **Volúmenes emptyDir**: Montados en /tmp y /app-nonroot/tmp para escritura temporal
 
 ## Uso
+
+### Inicializar Minikube
+
+```bash
+# Comando de inicialización
+minikube start
+```
+
 
 ### Construcción de Imágenes Docker
 
@@ -112,6 +122,9 @@ make k8s-apply
 # Verificar estado
 kubectl get pods
 kubectl get services
+
+# Desplegar servicios 
+make k8s-deploy
 
 # Limpiar recursos
 make k8s-clean
@@ -158,15 +171,6 @@ cat reports/compare.json
 - **Escritura de archivos**: ✗ Bloqueada
 - **Error**: "[Errno 30] Read-only file system"
 - **Permisos**: Restringidos según políticas de seguridad
-
-## Documentación Adicional
-
-- [Sprint Backlog - Sprint 1](doc/sprint-backlog-sprint1.md)
-- [Sprint Backlog - Sprint 2](doc/sprint-backlog-sprint2.md)
-- [Métricas del Proyecto](doc/metrics.md)
-- [Registro de Riesgos](doc/risk-register.md)
-- [Definition of Done](doc/definition-of-done.md)
-- [Visión del Proyecto](doc/vision.md)
 
 ## Conclusiones
 

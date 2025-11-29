@@ -88,9 +88,7 @@ Completar la documentación del proyecto actualizando los archivos necesarios pa
 
 - [x] Crear doc/sprint-backlog-sprint2.md con las historias del sprint
 - [x] Actualizar doc/metrics.md con métricas reales del Sprint 2
-- [x] Actualizar doc/risk-register.md marcando riesgos mitigados
 - [x] Mejorar README.md con instrucciones de Kubernetes
-- [x] Documentar el script compare-modes.sh
 
 **Responsable(s)**: Albert Argumedo
 
@@ -100,10 +98,7 @@ Completar la documentación del proyecto actualizando los archivos necesarios pa
 
 ## Notas del Sprint
 
-- Se implementó port-forward en lugar de acceso directo a NodePort para mejor compatibilidad con WSL
-- Los volúmenes emptyDir fueron necesarios para que la aplicación funcione con readOnlyRootFilesystem
 - El script compare-modes.sh generó evidencia concreta del comportamiento en reports/compare.json
 - Se validó que readOnlyRootFilesystem bloquea correctamente la escritura en modo non-root
 - La configuración capabilities.drop: ALL elimina todos los privilegios del contenedor
-- Ambos pods arrancan exitosamente en Minikube sin problemas de compatibilidad
-- El trabajo se distribuyó equilibradamente entre ambos miembros del equipo
+
